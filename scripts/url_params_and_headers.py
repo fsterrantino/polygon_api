@@ -7,7 +7,7 @@ headers = {
 params = {
     'adjusted': 'true'
     , 'sort': 'asc'
-    , 'limit': 120
+    , 'limit': 24
 
 }
 
