@@ -1,7 +1,6 @@
 import pandas as pd
 
 def json_dict_to_dataframe(json_dicts_list):
-
     tickers_data = []
 
     for json_dict in json_dicts_list:
@@ -15,11 +14,13 @@ def json_dict_to_dataframe(json_dicts_list):
                 , 'close_price': ticker['c']
                 , 'highest_price': ticker['h']
                 , 'lowest_price': ticker['l']
-                , 'time_unix_ms': ticker['t']
+                , 'timestamp': ticker['t']
                 , 'transactions_number': ticker['n']
             }
 
             tickers_data.append(ticker_data)
 
     df = pd.DataFrame.from_dict(tickers_data)
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+
     return df
