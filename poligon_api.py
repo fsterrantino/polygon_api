@@ -5,13 +5,17 @@ from scripts.parse_response import json_dict_to_dataframe
 responses_list = []
 # tickers_to_query_list = ['AAPL']
 tickers_to_query_list = ['AAPL', 'AMZN']
+start_date = '2023-11-27'
+end_date = '2023-11-27'
+time_frame = 'hour'
+frame_multiplier = 1
 
 for ticker in tickers_to_query_list:
 
     while True:
         url = None
         if not url:
-            url = get_url(ticker)
+            url = get_url(ticker, start_date, end_date, time_frame, frame_multiplier)
 
         response = fetch_data_from_api(url, params, headers)
 
@@ -36,4 +40,4 @@ for ticker in tickers_to_query_list:
 
 df = json_dict_to_dataframe(responses_list)
 print(df)
-# df.to_csv('stocks_bars.csv')
+df.to_csv('stocks_bars.csv')

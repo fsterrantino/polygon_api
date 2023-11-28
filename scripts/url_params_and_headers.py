@@ -11,17 +11,17 @@ params = {
 
 }
 
-def get_url(ticker):
+def get_url(ticker, start_date, end_date, time_frame, frame_multiplier):
 
     url = 'https://api.polygon.io/v2/aggs/ticker/'
 
     url_appending_params = {
         'ticker': ticker
         , 'range': 'range'
-        , 'multiplier': 1
-        , 'timespam': 'hour'
-        , 'from': '2023-11-23' # format: 2023-01-09
-        , 'to': '2023-11-24' # format: 2023-01-10
+        , 'multiplier': frame_multiplier
+        , 'timespam': time_frame
+        , 'from': start_date # format: 2023-01-09
+        , 'to': end_date # format: 2023-01-10
     }
 
     url_appending = ''
