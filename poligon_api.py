@@ -40,4 +40,4 @@ for ticker in tickers_to_query_list:
 
 df = json_dict_to_dataframe(responses_list)
 print(df)
-df.to_csv('stocks_bars.csv')
+df.to_csv('stocks_bars.csv', sep=';')
