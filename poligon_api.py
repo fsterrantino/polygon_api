@@ -5,7 +5,7 @@ from scripts.url_params_and_headers import params
 
 responses_list = []
 # tickers_to_query_list = ['AAPL']
-tickers_to_query_list = ['AAPL', 'AMZN']
+tickers_to_query_list = ['AAPL', 'AMZN', 'TSLA', 'BABA', 'MSFT']
 start_date = '2023-11-27'
 end_date = '2023-11-27'
 time_frame = 'hour'
@@ -41,4 +41,4 @@ for ticker in tickers_to_query_list:
 
 df = json_dict_to_dataframe(responses_list)
 print(df)
-# df.to_csv('stocks_bars.csv', sep=';', index=False)
+df.to_csv('stocks_bars.csv', sep=';', index=False)
