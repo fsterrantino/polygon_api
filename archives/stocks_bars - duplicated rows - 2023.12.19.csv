@@ -1,0 +1,4 @@
+,ticker,volume_x,volume_weighted_avg_price_x,open_price_x,close_price_x,highest_price_x,lowest_price_x,transactions_number_x,datetime,volume_y,volume_weighted_avg_price_y,open_price_y,close_price_y,highest_price_y,lowest_price_y,transactions_number_y
+0,AAPL,34277,195.9193,196.32,195.77,196.49,195.5,920,2023-12-18 09:00:00,34277.0,195.9193,196.32,195.77,196.49,195.5,920
+1,AAPL,14606,196.0143,195.8,196.05,196.2,195.8,419,2023-12-18 10:00:00,14606.0,196.0143,195.8,196.05,196.2,195.8,419
+2,AAPL,17672,196.1143,196.07,196.21,196.31,195.95,398,2023-12-18 11:00:00,17672.0,196.1143,196.07,196.21,196.31,195.95,398

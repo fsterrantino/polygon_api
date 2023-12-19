@@ -2,3 +2,5 @@ api_secrets.py
 Devoluciones_profe/
 __pycache__/
 scripts/__pychache__/
+config.ini
+.env

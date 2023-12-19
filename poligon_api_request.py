@@ -1,19 +1,22 @@
-from scripts.url_params_and_headers import get_url
-from scripts.fetch_data import fetch_data_from_api
-from scripts.parse_response import json_dict_to_dataframe
-from scripts.url_params_and_headers import params
+from scripts.request.url_params_and_headers import get_url
+from scripts.request.fetch_data import fetch_data_from_api
+from scripts.request.parse_response import json_dict_to_dataframe
+from scripts.request.url_params_and_headers import params
 import configparser
+from datetime import datetime, timedelta
 
 config = configparser.ConfigParser()
 config.sections()
 config.read('./config.ini')
 
+yesterday_date = datetime.now() - timedelta(days=1)
+formatted_yesterday_date = yesterday_date.strftime('%Y-%m-%d')
+
 responses_list = []
-# tickers_to_query_list = ['AAPL']
 tickers_to_query_list = config['API_PARAMETERS']['tickers_to_query_list']
 tickers_to_query_list = tickers_to_query_list.split(', ')
-start_date = config['API_PARAMETERS']['start_date']
-end_date = config['API_PARAMETERS']['end_date']
+start_date = formatted_yesterday_date
+end_date = formatted_yesterday_date
 time_frame = config['API_PARAMETERS']['time_frame']
 frame_multiplier = config['API_PARAMETERS']['frame_multiplier']
 
@@ -47,4 +50,9 @@ for ticker in tickers_to_query_list:
 
 df = json_dict_to_dataframe(responses_list)
 print(df)
-df.to_csv('stocks_bars.csv', sep=';', index=False)
+
+path = 'archives/'
+yesterday_date = yesterday_date.strftime('%Y.%m.%d')
+archive_name = 'stocks_bars - ' + yesterday_date + '.csv'
+
+df.to_csv(path + archive_name, sep=';', index=False)
