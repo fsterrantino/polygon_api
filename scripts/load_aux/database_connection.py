@@ -9,7 +9,7 @@ DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
 
 config = configparser.ConfigParser()
 config.sections()
-config.read('./config.ini')
+config.read('/opt/config.ini')
 
 dbname = config.get('DATABASE_CONNECTION', 'dbname')
 host = config.get('DATABASE_CONNECTION', 'host')

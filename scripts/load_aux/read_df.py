@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 def read_df():
-    path = './archives/'
+    path = '/opt/archives/'
 
     yesterday_date = datetime.now() - timedelta(days=1)
     formatted_date = yesterday_date.strftime('%Y.%m.%d')
