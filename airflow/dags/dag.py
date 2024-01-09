@@ -33,5 +33,4 @@ with DAG(
         dag=dag,
     )
 
-task1
-task2
+task1 >> task2

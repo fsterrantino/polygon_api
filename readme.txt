@@ -17,7 +17,7 @@ Instrucciones:
 	DATABASE_PASSWORD = estaEsmiPassword156
 
 - Correr docker + airflow:
-	- docker-build
+	- docker-compose build
 	- docker-compose up -d
 
 - Configurar la conexión a la DB desde la UI de Airflow: admin -> connections -> +

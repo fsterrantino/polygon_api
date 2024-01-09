@@ -41,7 +41,7 @@ def obtain_df_to_insert_without_duplicates(current_df, df_to_insert):
         formatted_date = current_date.strftime('%Y.%m.%d')
         archive_name = 'stocks_bars - duplicated rows - ' + formatted_date + '.csv'
 
-        common_rows.to_csv('./archives/' + archive_name)
+        common_rows.to_csv('/opt/archives/' + archive_name)
         print('Duplicates where identified. Number of rows:', common_rows.shape[0]) 
         print('Aux archive generated.')
 
