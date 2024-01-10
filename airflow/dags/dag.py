@@ -4,7 +4,8 @@ from airflow import DAG
 import sys
 
 sys.path.append('/opt/scripts/')
-from poligon_api_request import make_request
+from poligon_api_extract import extract_data
+from poligon_api_transform import transform_data
 from poligon_api_load import load_data
 
 default_args={
@@ -15,22 +16,31 @@ default_args={
 
 with DAG(
     default_args=default_args,
-    dag_id='Request_and_load',
+    dag_id='Polygon_API_ETL',
     description= 'Prueba',
     start_date=datetime(2024,1,9),
     schedule_interval='0 0 * * *'
     ) as dag:
 
     task1 = PythonOperator(
-        task_id='Request',
-        python_callable=make_request,
-        dag=dag,
+        task_id='extract_data',
+        python_callable=extract_data,
+        provide_context=True,
+        dag=dag
     )
 
     task2 = PythonOperator(
-        task_id='load_data',
-        python_callable=load_data,
-        dag=dag,
+        task_id='transform_data',
+        python_callable=transform_data,
+        provide_context=True,
+        dag=dag
     )
 
-task1 >> task2
+    task3 = PythonOperator(
+        task_id='load_data',
+        python_callable=load_data,
+        provide_context=True,
+        dag=dag
+    )
+
+task1 >> task2 >> task3

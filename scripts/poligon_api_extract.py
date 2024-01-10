@@ -1,18 +1,17 @@
-from request_aux.url_params_and_headers import get_url
-from request_aux.fetch_data import fetch_data_from_api
-from request_aux.parse_response import json_dict_to_dataframe
-from request_aux.url_params_and_headers import params
+from extract_aux.url_params_and_headers import get_url
+from extract_aux.fetch_data import fetch_data_from_api
+from extract_aux.parse_response import json_dict_to_dataframe
+from extract_aux.url_params_and_headers import params
+from extract_aux.obtain_yesterday_date import obtain_yesterday_date
 import configparser
-from datetime import datetime, timedelta
 
-def make_request(params):
+def extract_data(params, **kwargs):
     config = configparser.ConfigParser()
     config.sections()
     config.read('/opt/config.ini')
-    print(config)
 
-    yesterday_date = datetime.now() - timedelta(days=1)
-    formatted_yesterday_date = yesterday_date.strftime('%Y-%m-%d')
+    execution_date = kwargs.get('execution_date')
+    formatted_yesterday_date = obtain_yesterday_date(execution_date)
 
     responses_list = []
     tickers_to_query_list = config['API_PARAMETERS']['tickers_to_query_list']
@@ -51,10 +50,9 @@ def make_request(params):
                 break
 
     df = json_dict_to_dataframe(responses_list)
-    print(df)
 
     path = '/opt/archives/'
-    yesterday_date = yesterday_date.strftime('%Y.%m.%d')
-    archive_name = 'stocks_bars - ' + yesterday_date + '.csv'
+    formatted_yesterday_date = formatted_yesterday_date.replace('-', '.')
+    archive_name = 'stocks_bars - ' + formatted_yesterday_date + '.csv'
 
     df.to_csv(path + archive_name, sep=';', index=False)

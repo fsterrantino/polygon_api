@@ -4,4 +4,4 @@ def insert_df_into_db(df, engine):
         print("Data inserted into Redshift table successfully!")
 
     except Exception as e:
-        print("Error inserting data into Redshift:", e)
+        raise print("Error inserting data into Redshift:", e)

@@ -1,6 +1,6 @@
 import pandas as pd
 from sqlalchemy.exc import SQLAlchemyError
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def where_or_and_condition(list, clause, column_to_query):
     string_list_elements = ', '.join(f"'{item}'" for item in list)
@@ -36,22 +36,26 @@ def obtain_df_to_insert_without_duplicates(current_df, df_to_insert):
     mask = ~((df_to_insert[compare_cols[0]].isin(common_rows[compare_cols[0]])) & (df_to_insert[compare_cols[1]].isin(common_rows[compare_cols[1]])))
     df_to_insert_unique = df_to_insert[mask]
 
+    current_date = datetime.now()
+    yesterday_date = current_date - timedelta(days=1)
+    formatted_date = yesterday_date.strftime('%Y.%m.%d')
+
+    archive_name = 'stocks_bars - unique rows - ' + formatted_date + '.csv'
+    df_to_insert_unique.to_csv('/opt/archives/' + archive_name, index=False, sep=';')
+    print('df_to_insert with unique values created.')
+
     if not common_rows.empty:
-        current_date = datetime.now()
-        formatted_date = current_date.strftime('%Y.%m.%d')
         archive_name = 'stocks_bars - duplicated rows - ' + formatted_date + '.csv'
 
-        common_rows.to_csv('/opt/archives/' + archive_name)
+        common_rows.to_csv('/opt/archives/' + archive_name, index=False, sep=';')
         print('Duplicates where identified. Number of rows:', common_rows.shape[0]) 
-        print('Aux archive generated.')
-
-        print(df_to_insert_unique.head())
+        print('Aux archive with duplicates generated.')
+        
     else:
         print('There are not duplicated values.')
 
     print('Records to insert:', df_to_insert_unique.shape[0])
     return df_to_insert_unique
-
 
 def avoid_inserting_duplicates(df_to_insert, engine):
     print('Starting duplicates check.')
