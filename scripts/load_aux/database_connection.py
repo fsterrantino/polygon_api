@@ -3,13 +3,12 @@ import configparser
 from dotenv import load_dotenv
 import os
 from sqlalchemy import create_engine
+from common_aux.config_read import config_read
 
 load_dotenv(dotenv_path='./.env')
 DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
 
-config = configparser.ConfigParser()
-config.sections()
-config.read('/opt/config.ini')
+config = config_read()
 
 dbname = config.get('DATABASE_CONNECTION', 'dbname')
 host = config.get('DATABASE_CONNECTION', 'host')

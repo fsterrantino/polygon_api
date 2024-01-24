@@ -3,12 +3,12 @@ from extract_aux.fetch_data import fetch_data_from_api
 from extract_aux.parse_response import json_dict_to_dataframe
 from extract_aux.url_params_and_headers import params
 from extract_aux.obtain_yesterday_date import obtain_yesterday_date
-import configparser
+from common_aux.config_read import config_read
 
 def extract_data(params, **kwargs):
-    config = configparser.ConfigParser()
-    config.sections()
-    config.read('/opt/config.ini')
+
+    print('Starting extraction.')
+    config = config_read()
 
     execution_date = kwargs.get('execution_date')
     formatted_yesterday_date = obtain_yesterday_date(execution_date)
@@ -23,36 +23,46 @@ def extract_data(params, **kwargs):
 
     for ticker in tickers_to_query_list:
         url = None
-        while True:
+        cycle_flag = True
+
+        while cycle_flag == True:
             if not url:
                 url = get_url(ticker, start_date, end_date, time_frame, frame_multiplier)
-                print(url)
+
+            print('Url:', url)
             response = fetch_data_from_api(url, params)
-            print(response)
+            print('Response:', response)
 
             if response is not None:
                 print("Data fetched successfully!")
+
+                if response['resultsCount'] > 0:
+                    responses_list.append(response)
+
+                    next_url = response.get('next_url', None)
+                    print('Next url:', next_url)
+                    if next_url:
+                        url = next_url
+                        params = None      
+                        next_url = None
+                    else:
+                        cycle_flag = False
+                        
+                else:    
+                    print("No results for this period.")
+                    cycle_flag = False    
+
             else:
                 print("Failed to fetch data.")
                 break
 
-            if response['resultsCount'] == 0:
-                print("No results for this period.")
+    if responses_list:        
+        df = json_dict_to_dataframe(responses_list)
+        path = '/opt/archives/'
+        formatted_yesterday_date = formatted_yesterday_date.replace('-', '.')
+        archive_name = 'stocks_bars - ' + formatted_yesterday_date + '.csv'
 
-            responses_list.append(response)
-            next_url = response.get('next_url', None)
+        df.to_csv(path + archive_name, sep=';', index=False)
 
-            if next_url:
-                url = next_url
-                params = None      
-                next_url = None
-            else:
-                break
-
-    df = json_dict_to_dataframe(responses_list)
-
-    path = '/opt/archives/'
-    formatted_yesterday_date = formatted_yesterday_date.replace('-', '.')
-    archive_name = 'stocks_bars - ' + formatted_yesterday_date + '.csv'
-
-    df.to_csv(path + archive_name, sep=';', index=False)
+    else:
+        print('No results for all tickers for this period.')

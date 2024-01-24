@@ -26,26 +26,25 @@ def obtain_current_df_from_redshift(df_to_insert, engine):
     except Exception as e:
         print("An error occurred:", e)
 
-def obtain_df_to_insert_without_duplicates(current_df, df_to_insert):  
+def obtain_df_to_insert_without_duplicates(current_df, df_to_insert, yesterday_date):  
     df_to_insert['datetime'] = pd.to_datetime(df_to_insert['datetime'])
     print('Number of rows to insert:', df_to_insert.shape[0], '(before duplicates check)')
 
+    # The script checks if the combination ticker, datetime, it's already inserted in Postgre.
     compare_cols = ['ticker', 'datetime']
     common_rows = pd.merge(current_df, df_to_insert, on=compare_cols, how='inner')
 
     mask = ~((df_to_insert[compare_cols[0]].isin(common_rows[compare_cols[0]])) & (df_to_insert[compare_cols[1]].isin(common_rows[compare_cols[1]])))
     df_to_insert_unique = df_to_insert[mask]
 
-    current_date = datetime.now()
-    yesterday_date = current_date - timedelta(days=1)
-    formatted_date = yesterday_date.strftime('%Y.%m.%d')
+    formatted_yesterday_date = yesterday_date.replace('-', '.')
 
-    archive_name = 'stocks_bars - unique rows - ' + formatted_date + '.csv'
+    archive_name = 'stocks_bars - unique rows - ' + formatted_yesterday_date + '.csv'
     df_to_insert_unique.to_csv('/opt/archives/' + archive_name, index=False, sep=';')
     print('df_to_insert with unique values created.')
 
     if not common_rows.empty:
-        archive_name = 'stocks_bars - duplicated rows - ' + formatted_date + '.csv'
+        archive_name = 'stocks_bars - duplicated rows - ' + formatted_yesterday_date + '.csv'
 
         common_rows.to_csv('/opt/archives/' + archive_name, index=False, sep=';')
         print('Duplicates where identified. Number of rows:', common_rows.shape[0]) 
@@ -57,10 +56,10 @@ def obtain_df_to_insert_without_duplicates(current_df, df_to_insert):
     print('Records to insert:', df_to_insert_unique.shape[0])
     return df_to_insert_unique
 
-def avoid_inserting_duplicates(df_to_insert, engine):
+def avoid_inserting_duplicates(df_to_insert, engine, formatted_yesterday_date):
     print('Starting duplicates check.')
     current_redshift_df = obtain_current_df_from_redshift(df_to_insert, engine)
-    df_to_insert_unique = obtain_df_to_insert_without_duplicates(current_redshift_df, df_to_insert)
+    df_to_insert_unique = obtain_df_to_insert_without_duplicates(current_redshift_df, df_to_insert, formatted_yesterday_date)
     print('Duplicates check finished.')
     return df_to_insert_unique
 
