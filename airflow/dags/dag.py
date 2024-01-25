@@ -3,11 +3,11 @@ from datetime import datetime, timedelta
 from airflow import DAG
 import sys
 
-sys.path.append('/opt/scripts/')
-from poligon_api_extract import extract_data
-from poligon_api_transform import transform_data
-from poligon_api_load import load_data
-from poligon_api_alerts import alert_thresholds_gaps
+# sys.path.append('/opt/scripts/')
+from scripts.poligon_api_extract import extract_data
+from scripts.poligon_api_transform import transform_data
+from scripts.poligon_api_load import load_data
+from scripts.poligon_api_alerts import alert_thresholds_gaps
 
 default_args={
     'owner': 'Fran',
@@ -20,7 +20,7 @@ with DAG(
     dag_id='Polygon_API_ETL',
     description= 'Prueba',
     start_date=datetime(2024,1,22),
-    # end_date=datetime(2024,1,19),
+    end_date=datetime(2024,1,26),
     schedule_interval='0 0 * * *'
     ) as dag:
 
@@ -28,7 +28,7 @@ with DAG(
         task_id='extract_data',
         python_callable=extract_data,
         provide_context=True,
-        depends_on_past=True,
+        depends_on_past=False,
         dag=dag
     )
 
@@ -53,4 +53,5 @@ with DAG(
         dag=dag
     )
 
-task1 >> task2 >> task3 >> task4
+task1 >> task2 >> task3 
+task2 >> task4

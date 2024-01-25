@@ -1,6 +1,6 @@
-from load_aux.read_df import read_df
-from extract_aux.obtain_yesterday_date import obtain_yesterday_date
-from alert_aux.send_email import send_email
+from scripts.load_aux.read_df import read_df
+from scripts.extract_aux.obtain_yesterday_date import obtain_yesterday_date
+from scripts.alert_aux.send_email import send_email
 
 def alert_thresholds_gaps(**kwargs):
     execution_date = kwargs.get('execution_date')

@@ -1,7 +1,7 @@
-from load_aux.read_df import read_df
-from load_aux.database_connection import connect_database, disconnect_database, create_sqlAlchemy_engine
-from transform_aux.integrity_checks import avoid_inserting_duplicates
-from extract_aux.obtain_yesterday_date import obtain_yesterday_date
+from scripts.load_aux.read_df import read_df
+from scripts.load_aux.database_connection import connect_database, disconnect_database, create_sqlAlchemy_engine
+from scripts.transform_aux.integrity_checks import avoid_inserting_duplicates
+from scripts.extract_aux.obtain_yesterday_date import obtain_yesterday_date
 
 def transform_data(**kwargs):
     execution_date = kwargs.get('execution_date')

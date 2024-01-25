@@ -1,6 +1,5 @@
 import pandas as pd
 from sqlalchemy.exc import SQLAlchemyError
-from datetime import datetime, timedelta
 
 def where_or_and_condition(list, clause, column_to_query):
     string_list_elements = ', '.join(f"'{item}'" for item in list)
@@ -34,6 +33,7 @@ def obtain_df_to_insert_without_duplicates(current_df, df_to_insert, yesterday_d
     compare_cols = ['ticker', 'datetime']
     common_rows = pd.merge(current_df, df_to_insert, on=compare_cols, how='inner')
 
+    # The mask flag each row if the ticker is in common_rows, and if datetime is in common rows. If both are true for a row, it's excluded as 'False' to be filtered in the df_to_insert_unique.
     mask = ~((df_to_insert[compare_cols[0]].isin(common_rows[compare_cols[0]])) & (df_to_insert[compare_cols[1]].isin(common_rows[compare_cols[1]])))
     df_to_insert_unique = df_to_insert[mask]
 

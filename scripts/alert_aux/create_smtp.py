@@ -1,5 +1,5 @@
 import smtplib
-from common_aux.config_read import config_read
+from scripts.common_aux.config_read import config_read
 from dotenv import load_dotenv
 import os
 

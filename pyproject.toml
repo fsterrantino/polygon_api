@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "scripts"
+version = "1.0.0"
+description = "ETL scripts"
+authors = ["Franco Sterrantino"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,4 +1,2 @@
-# psycopg2==2.9.9
-# requests==2.31.0
-# SQLAlchemy==1.4.50
 python-dotenv==0.21.1
+./scripts-1.0.0-py3-none-any.whl

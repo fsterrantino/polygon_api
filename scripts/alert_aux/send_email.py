@@ -1,5 +1,5 @@
-from alert_aux.create_smtp import create_smtp
-from common_aux.config_read import config_read
+from scripts.alert_aux.create_smtp import create_smtp
+from scripts.common_aux.config_read import config_read
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 

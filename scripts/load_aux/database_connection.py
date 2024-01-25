@@ -1,9 +1,8 @@
 import psycopg2
-import configparser
 from dotenv import load_dotenv
 import os
 from sqlalchemy import create_engine
-from common_aux.config_read import config_read
+from scripts.common_aux.config_read import config_read
 
 load_dotenv(dotenv_path='./.env')
 DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')

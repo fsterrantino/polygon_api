@@ -1,9 +1,9 @@
-from extract_aux.url_params_and_headers import get_url
-from extract_aux.fetch_data import fetch_data_from_api
-from extract_aux.parse_response import json_dict_to_dataframe
-from extract_aux.url_params_and_headers import params
-from extract_aux.obtain_yesterday_date import obtain_yesterday_date
-from common_aux.config_read import config_read
+from scripts.extract_aux.url_params_and_headers import get_url
+from scripts.extract_aux.fetch_data import fetch_data_from_api
+from scripts.extract_aux.parse_response import json_dict_to_dataframe
+from scripts.extract_aux.url_params_and_headers import params
+from scripts.extract_aux.obtain_yesterday_date import obtain_yesterday_date
+from scripts.common_aux.config_read import config_read
 
 def extract_data(params, **kwargs):
 
@@ -58,9 +58,10 @@ def extract_data(params, **kwargs):
 
     if responses_list:        
         df = json_dict_to_dataframe(responses_list)
+        df['extraction_date'] = execution_date.strftime('%Y-%m-%d')
+
         path = '/opt/archives/'
-        formatted_yesterday_date = formatted_yesterday_date.replace('-', '.')
-        archive_name = 'stocks_bars - ' + formatted_yesterday_date + '.csv'
+        archive_name = 'stocks_bars - ' + formatted_yesterday_date.replace('-', '.') + '.csv'
 
         df.to_csv(path + archive_name, sep=';', index=False)
 

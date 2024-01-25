@@ -1,6 +1,6 @@
 import requests
 import time
-from .url_params_and_headers import headers
+from scripts.extract_aux.url_params_and_headers import headers
 
 def fetch_data_from_api(url, params):
     try:
