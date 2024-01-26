@@ -1,6 +1,7 @@
 from scripts.load_aux.read_df import read_df
 from scripts.extract_aux.obtain_yesterday_date import obtain_yesterday_date
 from scripts.alert_aux.send_email import send_email
+from scripts.common_aux.config_read import config_read
 
 def alert_thresholds_gaps(**kwargs):
     execution_date = kwargs.get('execution_date')
@@ -8,8 +9,9 @@ def alert_thresholds_gaps(**kwargs):
 
     df = read_df('normal', formatted_yesterday_date)
 
-    percentage_increase_threshold = 1.8
-    percentage_decrease_threshold = -2
+    config = config_read()
+    percentage_increase_threshold = float(config['ALERTS_PARAMS']['percentage_increase_threshold'])
+    percentage_decrease_threshold = float(config['ALERTS_PARAMS']['percentage_decrease_threshold'])
 
     # Calculate the percentage change within each ticker
     df['percentage_change'] = df.groupby('ticker')['close_price'].pct_change() * 100

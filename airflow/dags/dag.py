@@ -28,7 +28,6 @@ with DAG(
         task_id='extract_data',
         python_callable=extract_data,
         provide_context=True,
-        depends_on_past=False,
         dag=dag
     )
 
